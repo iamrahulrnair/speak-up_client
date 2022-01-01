@@ -1,11 +1,21 @@
-import '../styles/globals.css';
 import Header from '../components/Header';
 import buildClient from './api/build-client';
 import { useState, useEffect } from 'react';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+  body: {
+    '& a': {
+      textDecoration: 'none',
+      // color: 'white',
+    },
+  },
+});
 
 function MyApp({ Component, pageProps, currentUser }) {
+  const classes = useStyles();
   return (
-    <div>
+    <div className={classes.body}>
       <Header currentUser={currentUser} />
       <div>
         <Component {...pageProps} currentUser={currentUser} />

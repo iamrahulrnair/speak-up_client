@@ -2,6 +2,9 @@ import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import useRequest from '../../hooks/use-request';
 
+import Button from '@mui/material/Button';
+import { Typography } from '@mui/material';
+
 export default ({ currentUser }) => {
   const [companyName, setCompanyName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
@@ -55,7 +58,11 @@ export default ({ currentUser }) => {
         );
       });
     } else if (posts?.length == 0 && currentUser) {
-      return <h1>No Companies Listed Right now!! Try raising a request.</h1>;
+      return (
+        <Typography variant='h1' color='primary'>
+          No Companies Listed Right now!! Try raising a request.
+        </Typography>
+      );
     } else {
       return <h3>Loading....</h3>;
     }
@@ -87,7 +94,9 @@ export default ({ currentUser }) => {
             </div>
 
             <div>
-              <button type='submit'>Submit</button>
+              <Button variant='contained' type='submit'>
+                Submit
+              </Button>
             </div>
           </form>
           {errors}
