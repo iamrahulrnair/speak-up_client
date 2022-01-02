@@ -2,6 +2,7 @@ import Link from 'next/link';
 
 import { AppBar, Container, Toolbar, Typography } from '@mui/material';
 import { makeStyles } from '@mui/styles';
+import { useEffect } from 'react';
 
 const useStyles = makeStyles({
   nav__wrapper: {
@@ -18,9 +19,9 @@ const useStyles = makeStyles({
     gap: '20px',
   },
   nav__item: {
-    color: '#eef',
+    color: '#FE7f6D',
     '&:hover': {
-      color: '#FE7E6D',
+      color: '#333',
     },
   },
 });
@@ -56,7 +57,7 @@ export default ({ currentUser }) => {
     });
 
   return (
-    <AppBar position='static' color='success'>
+    <AppBar position='static' color=''>
       <Toolbar>
         <div className={classes.nav__wrapper}>
           <Link href='/' passHref>
@@ -68,9 +69,7 @@ export default ({ currentUser }) => {
               speakup
             </Typography>
           </Link>
-          <div>
-            <div className={classes.nav__container}>{links}</div>
-          </div>
+          <div className={classes.nav__container}>{links}</div>
         </div>
       </Toolbar>
     </AppBar>
