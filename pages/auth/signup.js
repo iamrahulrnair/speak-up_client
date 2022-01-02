@@ -2,7 +2,22 @@ import { useState, useEffect } from 'react';
 import Router from 'next/router';
 import useRequest from '../../hooks/use-request';
 
-export default () => {
+import { Button, TextField, Typography } from '@mui/material';
+import { makeStyles } from '@mui/styles';
+
+const useStyles = makeStyles({
+  form__container: {
+    height: '85vh',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: '100%',
+  },
+});
+
+export default ({ classes: GlobalField }) => {
+  const classes = useStyles();
+
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const { doRequest, errors } = useRequest({
@@ -10,39 +25,50 @@ export default () => {
     method: 'post',
     body: {
       email,
-      password
+      password,
     },
-    onSuccess: () => Router.push('/')
+    onSuccess: () => Router.push('/'),
   });
 
-  const onSubmit = async event => {
+  const onSubmit = async (event) => {
     event.preventDefault();
-
     await doRequest();
   };
+  console.log(errors);
 
   return (
-    <form onSubmit={onSubmit}>
-      <h1>Sign Up</h1>
-      <div className="form-group">
-        <label>Email Address</label>
-        <input
+    <div className={classes.form__container}>
+      <form noValidate autoComplete='off' onSubmit={onSubmit}>
+        <Typography variant='h4' gutterBottom>
+          Sign Up
+        </Typography>
+        <TextField
+          className={GlobalField.global_field}
           value={email}
-          onChange={e => setEmail(e.target.value)}
-          className="form-control"
+          onChange={(e) => setEmail(e.target.value)}
+          variant='outlined'
+          label='Email'
+          color='secondary'
         />
-      </div>
-      <div className="form-group">
-        <label>Password</label>
-        <input
+        <TextField
+          className={GlobalField.global_field}
           value={password}
-          onChange={e => setPassword(e.target.value)}
-          type="password"
-          className="form-control"
+          onChange={(e) => setPassword(e.target.value)}
+          type='password'
+          variant='outlined'
+          label='password'
+          color='secondary'
         />
-      </div>
-      {errors}
-      <button className="btn btn-primary">Sign Up</button>
-    </form>
+        {errors}
+        <Button
+          type='submit'
+          variant='contained'
+          className={`${GlobalField.global_field} btn btn-primary`}
+          color='primary'
+        >
+          Sign Up
+        </Button>
+      </form>
+    </div>
   );
 };
