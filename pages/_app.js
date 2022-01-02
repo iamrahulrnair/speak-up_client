@@ -1,6 +1,6 @@
 import Header from '../components/Header';
 import buildClient from './api/build-client';
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { makeStyles } from '@mui/styles';
 
 const useStyles = makeStyles({
@@ -10,15 +10,28 @@ const useStyles = makeStyles({
       // color: 'white',
     },
   },
+  global_field: {
+    margin: '20px',
+    display: 'block',
+  },
 });
 
 function MyApp({ Component, pageProps, currentUser }) {
   const classes = useStyles();
+
+  useEffect(() => {
+    // Remove the server-side injected CSS.
+    const jssStyles = document.querySelector('#jss-server-side');
+    if (jssStyles) {
+      jssStyles.parentElement.removeChild(jssStyles);
+    }
+  }, []);
+
   return (
     <div className={classes.body}>
       <Header currentUser={currentUser} />
       <div>
-        <Component {...pageProps} currentUser={currentUser} />
+        <Component {...pageProps} currentUser={currentUser} classes={classes} />
       </div>
     </div>
   );
