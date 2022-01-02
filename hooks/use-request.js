@@ -1,6 +1,9 @@
 import axios from 'axios';
 import { useState, useRef, useEffect } from 'react';
 
+import Alert from '@mui/material/Alert';
+import { AlertTitle } from '@mui/material';
+
 export default ({ url, method, body, onSuccess }) => {
   const [errors, setErrors] = useState(null);
   const _errorContainer = useRef();
@@ -8,7 +11,7 @@ export default ({ url, method, body, onSuccess }) => {
   useEffect(() => {
     if (errors) {
       setTimeout(() => {
-        _errorContainer.current.style.display = 'none';
+       _errorContainer.current?.style.display = 'none';
       }, 5000);
     }
   }, [errors]);
@@ -26,12 +29,17 @@ export default ({ url, method, body, onSuccess }) => {
     } catch (err) {
       setErrors(
         <div ref={_errorContainer} className='alert alert-danger'>
-          <h4>Ooops....</h4>
-          <ul className='my-0'>
-            {err.response.data.errors.map((err) => (
-              <li key={err.message}>{err.message}</li>
-            ))}
-          </ul>
+          {err.response.data.errors.map((err) => (
+            <Alert
+              style={{ marginBottom: '10px' }}
+              severity='error'
+              key={err.message}
+              variant='filled'
+            >
+              <AlertTitle>Error</AlertTitle>
+              {err.message}
+            </Alert>
+          ))}
         </div>
       );
     }
