@@ -3,9 +3,17 @@ import { useState, useEffect } from 'react';
 import useRequest from '../../hooks/use-request';
 
 import Button from '@mui/material/Button';
-import { Typography } from '@mui/material';
+import {
+  TextField,
+  Typography,
+  Card,
+  CardContent,
+  CardHeader,
+  CardMedia,
+} from '@mui/material';
+import { Person, StarHalf } from '@mui/icons-material/';
 
-export default ({ currentUser }) => {
+export default ({ currentUser, classes: PostGlobalSelectors }) => {
   const [companyName, setCompanyName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [posts, setPosts] = useState([]);
@@ -36,35 +44,44 @@ export default ({ currentUser }) => {
       return posts.map((el, ind) => {
         return (
           <>
-            <div key={ind}>
-              <h1>{el.companyName}</h1>
-              <div>
-                <img width='200px' src={el.imageurl} alt={el.companyName} />
-              </div>
-              <div>
-                <h4>About:</h4>
-                <p>{el.description}</p>
-              </div>
-              <h3>Average Rating: {el.ratingsAverage}</h3>
-              <h3>Total Ratings: {el.ratingsCount}</h3>
-            </div>
-            <div>
-              <Link href={`/post/${el.id}`}>
-                speakUP against this organization
-              </Link>
-            </div>
-            <hr></hr>
+            <Card key={ind} elevation={3}>
+              <CardHeader
+                title={el.companyName}
+                subheader={new Date().toLocaleDateString()}
+              ></CardHeader>
+              <CardMedia
+                component='img'
+                height='194'
+                image={el.imageurl}
+                alt={el.title}
+              />
+
+              <CardContent>
+                <Typography paragraph>{el.description}</Typography>
+                <Link href={`/post/${el.id}`} passHref>
+                  <Typography variant='body2' component='a' color='tomato'>
+                    speakUP against this organization
+                  </Typography>
+                </Link>
+              </CardContent>
+              <Typography variant='text-secondary'>
+                <StarHalf />:{el.ratingsAverage}
+              </Typography>
+              <Typography variant='text-secondary'>
+                <Person />:{el.ratingsCount}
+              </Typography>
+            </Card>
           </>
         );
       });
     } else if (posts?.length == 0 && currentUser) {
       return (
-        <Typography variant='h1' color='primary'>
+        <Typography variant='h2' color='primary'>
           No Companies Listed Right now!! Try raising a request.
         </Typography>
       );
     } else {
-      return <h3>Loading....</h3>;
+      return <Typography>Loading....</Typography>;
     }
   };
   if (currentUser) {
@@ -72,35 +89,36 @@ export default ({ currentUser }) => {
       <div>
         <div>{renderPosts()}</div>
         <hr></hr>
-        <h1>Your company not listed here?</h1>
-        <div>
-          <h3>Please raise a request!!</h3>
-        </div>
-        <div>
-          <form onSubmit={onSubmit}>
-            <div>
-              <label>ComapnyName:</label>
-              <input
-                value={companyName}
-                onChange={(e) => setCompanyName(e.target.value)}
-              ></input>
-            </div>
-            <div>
-              <label>imageURL:</label>
-              <input
-                value={imageUrl}
-                onChange={(e) => setImageUrl(e.target.value)}
-              ></input>
-            </div>
-
-            <div>
-              <Button variant='contained' type='submit'>
-                Submit
-              </Button>
-            </div>
-          </form>
+        <Typography variant='h4'>Your company not listed here?</Typography>
+        <form onSubmit={onSubmit}>
+          <div className={PostGlobalSelectors.global_field}>
+            <Typography variant='body'>Please raise a request!!</Typography>
+          </div>
+          <TextField
+            className={PostGlobalSelectors.global_field}
+            value={companyName}
+            onChange={(e) => setCompanyName(e.target.value)}
+            label='Company name'
+            variant='outlined'
+            color='secondary'
+          />
+          <TextField
+            className={PostGlobalSelectors.global_field}
+            value={imageUrl}
+            onChange={(e) => setImageUrl(e.target.value)}
+            label='Image url'
+            variant='outlined'
+            color='secondary'
+          />
           {errors}
-        </div>
+          <Button
+            className={PostGlobalSelectors.global_field}
+            variant='contained'
+            type='submit'
+          >
+            Submit
+          </Button>
+        </form>
       </div>
     );
   } else {
