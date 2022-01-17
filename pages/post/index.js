@@ -10,10 +10,20 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
+  Grid,
+  Container,
 } from '@mui/material';
+import { makeStyles } from '@mui/styles';
 import { Person, StarHalf } from '@mui/icons-material/';
+import { height } from '@mui/system';
+
+const useStyles = makeStyles({
+  card_box: {},
+});
 
 export default ({ currentUser, classes: PostGlobalSelectors }) => {
+  const classes = useStyles();
+
   const [companyName, setCompanyName] = useState('');
   const [imageUrl, setImageUrl] = useState('');
   const [posts, setPosts] = useState([]);
@@ -43,35 +53,43 @@ export default ({ currentUser, classes: PostGlobalSelectors }) => {
     if (posts?.length > 0 && currentUser) {
       return posts.map((el, ind) => {
         return (
-          <>
+          <Grid
+            item
+            lg={3}
+            md={6}
+            xs={12}
+            height={'100%'}
+            className={classes.card_box}
+          >
             <Card key={ind} elevation={3}>
               <CardHeader
                 title={el.companyName}
                 subheader={new Date().toLocaleDateString()}
               ></CardHeader>
               <CardMedia
+                style={{ maxHeight: '100px' }}
                 component='img'
-                height='194'
                 image={el.imageurl}
                 alt={el.title}
               />
-
               <CardContent>
-                <Typography paragraph>{el.description}</Typography>
+                <Typography paragraph>
+                  {el.description.slice(0, 100)}...
+                </Typography>
                 <Link href={`/post/${el.id}`} passHref>
                   <Typography variant='body2' component='a' color='tomato'>
                     speakUP against this organization
                   </Typography>
                 </Link>
               </CardContent>
-              <Typography variant='text-secondary'>
+              {/* <Typography variant='text-secondary'>
                 <StarHalf />:{el.ratingsAverage}
               </Typography>
               <Typography variant='text-secondary'>
                 <Person />:{el.ratingsCount}
-              </Typography>
+              </Typography> */}
             </Card>
-          </>
+          </Grid>
         );
       });
     } else if (posts?.length == 0 && currentUser) {
@@ -86,8 +104,10 @@ export default ({ currentUser, classes: PostGlobalSelectors }) => {
   };
   if (currentUser) {
     return (
-      <div>
-        <div>{renderPosts()}</div>
+      <Container>
+        <Grid spacing={3} marginTop={3} container>
+          {renderPosts()}
+        </Grid>
         <hr></hr>
         <Typography variant='h4'>Your company not listed here?</Typography>
         <form onSubmit={onSubmit}>
@@ -119,7 +139,7 @@ export default ({ currentUser, classes: PostGlobalSelectors }) => {
             Submit
           </Button>
         </form>
-      </div>
+      </Container>
     );
   } else {
     return <div> You are not logged in</div>;
